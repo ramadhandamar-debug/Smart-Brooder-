@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello! Welcome to Your Smart Brooder</title>
+  <title>Hello! Welcome To Your Smart Brooder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
-      --egg-white: #fffdf9;
-      --egg-cream: #f7efe2;
-      --egg-shell-light: #efe0c8;
-      --egg-shell-warm: #dfc39b;
+      --page-bright: #fffdf9;
+      --page-soft: #f8f1e5;
+      --cocoa-soft: #ead6be;
+      --cocoa-soft-bottom: #e0c7a8;
+      --cocoa-border: rgba(140, 88, 40, 0.24);
       --egg-brown: #8c5828;
       --egg-brown-dark: #4a2c11;
-      --layer-shell: rgba(214, 181, 138, 0.44);
-      --layer-shell-border: rgba(140, 88, 40, 0.24);
-      --card-bg: rgba(255, 253, 249, 0.92);
+      --card-bg: #fffdf9;
       --card-soft: #f5ead8;
-      --border-shell: rgba(140, 88, 40, 0.22);
+      --border-shell: rgba(140, 88, 40, 0.24);
       --text-primary: #2d1b0c;
       --text-muted: #6e5034;
       --accent-amber: #d97706;
@@ -29,6 +29,7 @@
       --accent-olive: #4d7c0f;
       --accent-caramel: #b45309;
       --accent-rose: #be123c;
+      --accent-sky: #0284c7;
     }
 
     * {
@@ -44,56 +45,73 @@
     }
 
     body {
-      padding: 26px 32px;
+      padding: 24px 28px;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background:
-        radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.95), transparent 36%),
-        radial-gradient(circle at 88% 12%, rgba(223, 195, 155, 0.62), transparent 42%),
-        radial-gradient(circle at 80% 88%, rgba(196, 154, 108, 0.46), transparent 45%),
-        linear-gradient(155deg, var(--egg-white) 0%, var(--egg-cream) 48%, var(--egg-shell-light) 100%);
+        radial-gradient(circle at 15% 10%, #ffffff 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(239, 224, 200, 0.7), transparent 50%),
+        linear-gradient(160deg, var(--page-bright) 0%, var(--page-soft) 100%);
       color: var(--text-primary);
       display: flex;
       flex-direction: column;
     }
 
-    .container {
+    .unified-cocoa-shell {
       width: 100%;
-      max-width: none;
+      max-width: 1520px;
+      margin: 0 auto;
       flex: 1;
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(165deg, var(--cocoa-soft) 0%, var(--cocoa-soft-bottom) 100%);
+      border: 1px solid var(--cocoa-border);
+      box-shadow: 0 12px 30px rgba(74, 44, 17, 0.08);
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
     }
 
     .topbar {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      flex-wrap: wrap;
       gap: 12px;
-      padding: 18px 24px;
-      background: linear-gradient(135deg, rgba(255, 254, 251, 0.94), rgba(242, 224, 197, 0.9));
+      padding: 15px 22px;
+      background: var(--card-bg);
       border: 1px solid var(--border-shell);
-      border-radius: 22px;
-      box-shadow: 0 8px 24px rgba(74, 44, 17, 0.08);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(74, 44, 17, 0.05);
+    }
+
+    .topbar-spacer {
+      display: block;
     }
 
     h1.main-title {
       margin: 0;
-      font-size: clamp(1.3rem, 2.4vw, 1.85rem);
+      text-align: center;
+      font-size: clamp(1.2rem, 2.2vw, 1.7rem);
       font-weight: 800;
       letter-spacing: -0.02em;
       color: var(--egg-brown-dark);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .topbar .status-pill {
+      justify-self: end;
     }
 
     .status-pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 15px;
+      padding: 7px 14px;
       border-radius: 999px;
       background: rgba(140, 88, 40, 0.12);
-      border: 1px solid rgba(140, 88, 40, 0.3);
+      border: 1px solid rgba(140, 88, 40, 0.28);
       color: var(--egg-brown-dark);
       font-size: 0.82rem;
       font-weight: 700;
@@ -110,23 +128,15 @@
     .main-layout {
       flex: 1;
       display: grid;
-      grid-template-columns: minmax(340px, 35%) minmax(0, 1fr);
+      grid-template-columns: minmax(360px, 38%) minmax(0, 1fr);
       gap: 20px;
       align-items: stretch;
-    }
-
-    .layer-panel {
-      background: var(--layer-shell);
-      border: 1px solid var(--layer-shell-border);
-      border-radius: 24px;
-      padding: 16px;
-      box-shadow: inset 0 1px 0 rgba(255, 253, 249, 0.6), 0 10px 26px rgba(74, 44, 17, 0.07);
     }
 
     .left-column {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
       height: 100%;
     }
 
@@ -134,30 +144,29 @@
       flex: 1;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 16px;
     }
 
     .right-column {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
       height: 100%;
     }
 
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(8px);
       border: 1px solid var(--border-shell);
-      border-radius: 18px;
+      border-radius: 16px;
       padding: 18px;
-      box-shadow: 0 6px 18px rgba(74, 44, 17, 0.06);
+      box-shadow: 0 4px 12px rgba(74, 44, 17, 0.05);
     }
 
     .metric-card {
       position: relative;
       overflow: hidden;
       height: 100%;
-      min-height: 118px;
+      min-height: 142px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -171,25 +180,143 @@
       background: var(--metric-color, var(--accent-brown));
     }
 
+    .metric-card.centered-metric {
+      align-items: center;
+      text-align: center;
+    }
+
     .metric-title {
-      font-size: 0.94rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: var(--egg-brown-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .metric-card.centered-metric .metric-title {
+      justify-content: center;
+      font-size: 0.98rem;
+    }
+
+    .metric-title i {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
     }
 
     .metric-value {
       font-family: 'JetBrains Mono', monospace;
-      font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+      font-size: clamp(1.3rem, 2.1vw, 1.8rem);
       font-weight: 700;
-      margin-top: 10px;
+      margin-top: 8px;
       color: var(--text-primary);
+    }
+
+    .metric-card.centered-metric .metric-value {
+      font-size: clamp(1.65rem, 2.7vw, 2.35rem);
+      margin: auto 0;
+      padding: 6px 0;
+    }
+
+    .metric-card.hatch-day-card {
+      justify-content: flex-start;
+      gap: 6px;
+      padding: 14px 14px 16px;
+    }
+
+    .nest-illustration-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px auto 2px;
+      width: 100%;
+      max-width: 200px;
+      max-height: 130px;
+    }
+
+    .nest-illustration-wrap svg {
+      width: 100%;
+      height: 100%;
+      max-height: 130px;
+      display: block;
+      filter: drop-shadow(0 4px 8px rgba(74, 44, 17, 0.14));
+    }
+
+    .metric-card.hatch-day-card .metric-value {
+      margin: 2px 0 0;
+      padding: 0;
+      line-height: 1.15;
+      font-size: clamp(1.45rem, 2.25vw, 1.95rem);
+    }
+
+    .gauge-box {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(140, 88, 40, 0.24);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .gauge-box canvas {
+      width: 100%;
+      max-width: 196px;
+      height: 98px;
+      display: block;
+    }
+
+    .gauge-scale {
+      width: 100%;
+      max-width: 196px;
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .gauge-setpoint-readout {
+      margin-top: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--accent-olive);
+      text-align: center;
+      transition: color 0.2s ease;
+    }
+
+    .gauge-status {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--egg-brown-dark);
+      margin-top: 2px;
+      text-align: center;
     }
 
     .section-heading {
       margin: 0 0 14px;
-      font-size: 1.18rem;
+      font-size: 1.02rem;
       font-weight: 700;
       color: var(--egg-brown-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-heading.centered {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    .section-heading i {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
     }
 
     .hatch-top-row {
@@ -197,6 +324,10 @@
       grid-template-columns: minmax(190px, 1.2fr) minmax(150px, 0.8fr) auto;
       gap: 14px;
       align-items: end;
+      background: var(--card-soft);
+      border: 1px solid var(--border-shell);
+      border-radius: 14px;
+      padding: 14px 16px;
     }
 
     .field-group {
@@ -206,22 +337,31 @@
     }
 
     .field-label {
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 700;
       color: var(--egg-brown-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .field-label i {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
     }
 
     input[type="date"],
     input[type="number"] {
       width: 100%;
-      min-height: 46px;
-      padding: 11px 14px;
-      border-radius: 14px;
+      min-height: 44px;
+      padding: 9px 12px;
+      border-radius: 11px;
       border: 1.5px solid rgba(140, 88, 40, 0.34);
-      background: var(--card-soft);
+      background: #fffdf9;
       color: var(--text-primary);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       outline: none;
     }
@@ -233,15 +373,26 @@
     }
 
     .btn {
-      min-height: 42px;
-      padding: 9px 16px;
-      border-radius: 14px;
+      min-height: 38px;
+      padding: 8px 14px;
+      border-radius: 11px;
       border: none;
       font-family: inherit;
-      font-size: 0.88rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
       transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+
+    .btn i {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
     }
 
     .btn:hover {
@@ -250,8 +401,9 @@
     }
 
     .btn-primary {
-      min-height: 46px;
-      padding: 11px 18px;
+      min-height: 44px;
+      padding: 9px 18px;
+      font-size: 0.88rem;
       background: linear-gradient(135deg, #8c5828, #5c3614);
       color: #fffdf9;
     }
@@ -261,15 +413,16 @@
       color: #fffdf9;
     }
 
-    .calendar-pair {
-      margin-top: 14px;
+    .calendar-split {
+      margin-top: 16px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 18px;
     }
 
     .cal-box {
-      border-radius: 16px;
+      height: 100%;
+      border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--border-shell);
       background: #fffdf9;
@@ -277,8 +430,8 @@
     }
 
     .cal-header {
-      padding: 8px 14px;
-      font-size: 0.84rem;
+      padding: 8px 12px;
+      font-size: 0.76rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -287,6 +440,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
+    }
+
+    .cal-header > span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cal-header i {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
     }
 
     .cal-header.harvest {
@@ -297,13 +463,13 @@
       padding: 12px 14px;
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .cal-day-badge {
-      min-width: 56px;
-      height: 58px;
-      border-radius: 14px;
+      min-width: 54px;
+      height: 56px;
+      border-radius: 12px;
       background: var(--card-soft);
       border: 1px solid rgba(140, 88, 40, 0.25);
       display: flex;
@@ -315,13 +481,13 @@
 
     .cal-day-num {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--egg-brown-dark);
     }
 
     .cal-weekday {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       color: var(--text-muted);
       margin-top: 2px;
@@ -334,13 +500,13 @@
     }
 
     .cal-month-year {
-      font-size: 0.94rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: var(--text-primary);
     }
 
     .cal-sub {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
       color: var(--text-muted);
     }
@@ -349,23 +515,28 @@
       flex: 1;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 20px;
       min-height: 290px;
     }
 
     .chart-card {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      min-height: 270px;
+      min-height: 268px;
     }
 
     .chart-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 12px;
+    }
+
+    .chart-header .section-heading {
+      margin: 0;
+      font-size: 0.96rem;
     }
 
     .chart-wrap {
@@ -375,18 +546,28 @@
       width: 100%;
     }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1120px) {
       .charts-grid {
         grid-template-columns: 1fr;
       }
     }
 
     @media (max-width: 1020px) {
+      .topbar {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+      .topbar-spacer {
+        display: none;
+      }
+      .topbar .status-pill {
+        justify-self: center;
+      }
       .main-layout {
         grid-template-columns: 1fr;
       }
       .metric-card {
-        min-height: 108px;
+        min-height: 128px;
       }
       .chart-wrap {
         min-height: 240px;
@@ -395,24 +576,24 @@
 
     @media (max-width: 640px) {
       body {
-        padding: 16px;
+        padding: 14px 12px;
       }
-      .layer-panel {
-        padding: 12px;
-        border-radius: 20px;
+      .unified-cocoa-shell {
+        padding: 14px;
+        border-radius: 18px;
       }
       .hatch-top-row {
         grid-template-columns: 1fr;
       }
-      .calendar-pair {
+      .calendar-split {
         grid-template-columns: 1fr;
+      }
+      .chart-header {
+        flex-wrap: wrap;
       }
     }
 
     @media (max-width: 480px) {
-      body {
-        padding: 12px;
-      }
       .pair-row {
         grid-template-columns: 1fr;
       }
@@ -420,9 +601,13 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="unified-cocoa-shell">
     <header class="topbar">
-      <h1 class="main-title">Hello! Welcome to Your Smart Brooder</h1>
+      <span class="topbar-spacer" aria-hidden="true"></span>
+      <h1 class="main-title">
+        <i data-lucide="egg" style="color: #d97706;"></i>
+        Hello! Welcome To Your Smart Brooder
+      </h1>
       <div class="status-pill">
         <span class="dot"></span>
         <span id="syncStatus">--</span>
@@ -430,65 +615,129 @@
     </header>
 
     <main class="main-layout">
-      <section class="left-column layer-panel">
+      <section class="left-column">
         <div class="pair-row">
-          <div class="card metric-card" style="--metric-color: var(--accent-amber);">
-            <div class="metric-title">Suhu Aktual</div>
+          <div class="card metric-card centered-metric" style="--metric-color: var(--accent-amber);">
+            <div class="metric-title">
+              <i data-lucide="thermometer" style="color: #ea580c;"></i>
+              Suhu Aktual
+            </div>
             <div class="metric-value" id="dsTemp">-- °C</div>
           </div>
 
           <div class="card metric-card" style="--metric-color: var(--accent-olive);">
-            <div class="metric-title">Set Point Suhu</div>
-            <div class="metric-value" id="setpointVal">-- °C</div>
+            <div class="metric-title">
+              <i data-lucide="gauge" style="color: #4d7c0f;"></i>
+              Suhu Acuan
+            </div>
+            <div class="gauge-box">
+              <canvas id="setpointGauge" width="196" height="98"></canvas>
+              <div class="gauge-scale">
+                <span>0°</span>
+                <span id="gaugeMaxLabel">37.5°</span>
+              </div>
+              <div class="gauge-setpoint-readout" id="setpointVal">-- °C</div>
+              <div class="gauge-status" id="gaugeStatus">--</div>
+            </div>
           </div>
         </div>
 
         <div class="pair-row">
-          <div class="card metric-card" style="--metric-color: var(--accent-rose);">
-            <div class="metric-title">Error Suhu</div>
+          <div class="card metric-card centered-metric" style="--metric-color: var(--accent-rose);">
+            <div class="metric-title">
+              <i data-lucide="alert-triangle" style="color: #be123c;"></i>
+              Error Suhu
+            </div>
             <div class="metric-value" id="errorVal">-- °C</div>
           </div>
 
-          <div class="card metric-card" style="--metric-color: var(--accent-caramel);">
-            <div class="metric-title">Duty Cycle PWM</div>
+          <div class="card metric-card centered-metric" style="--metric-color: var(--accent-caramel);">
+            <div class="metric-title">
+              <i data-lucide="sliders" style="color: #b45309;"></i>
+              Duty Cycle PWM
+            </div>
             <div class="metric-value" id="pwmVal">--</div>
           </div>
         </div>
 
         <div class="pair-row">
-          <div class="card metric-card" style="--metric-color: var(--accent-brown);">
-            <div class="metric-title">Air Humidity</div>
+          <div class="card metric-card centered-metric" style="--metric-color: var(--accent-sky);">
+            <div class="metric-title">
+              <i data-lucide="droplets" style="color: #0284c7;"></i>
+              Kelembaban Udara
+            </div>
             <div class="metric-value" id="humidityVal">-- %</div>
           </div>
 
-          <div class="card metric-card" style="--metric-color: var(--accent-amber);">
-            <div class="metric-title">Hari Penetasan</div>
+          <div class="card metric-card centered-metric hatch-day-card" style="--metric-color: var(--accent-amber);">
+            <div class="metric-title">
+              <i data-lucide="calendar-clock" style="color: #d97706;"></i>
+              Hari Penetasan
+            </div>
+            <div class="nest-illustration-wrap" aria-hidden="true">
+              <svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+                <path d="M34 74 L16 64 L38 66 L26 52 L46 60 L42 44 L56 57 L60 40 L68 55 L78 39 L82 54 L96 42 L96 56 L112 45 L108 58 L126 48 L118 60 L138 52 L126 63 L148 56 L132 66 L154 62 L134 70 L158 72 L134 76 L152 84 L126 82 L140 94 L114 88 L124 100 L98 92 L102 105 L80 94 L76 107 L60 94 L50 106 L44 92 L28 100 L34 86 L16 88 Z"
+                      fill="#e68a00" stroke="#5c2d0c" stroke-width="3" stroke-linejoin="round"/>
+                <ellipse cx="78" cy="64" rx="22" ry="30" transform="rotate(-14 78 64)"
+                         fill="#fff5e6" stroke="#5c2d0c" stroke-width="3"/>
+                <ellipse cx="71" cy="53" rx="6" ry="11" transform="rotate(-18 71 53)"
+                         fill="#ffffff" opacity="0.85"/>
+                <ellipse cx="136" cy="63" rx="20" ry="28" transform="rotate(16 136 63)"
+                         fill="#f7e3c6" stroke="#5c2d0c" stroke-width="3"/>
+                <ellipse cx="131" cy="52" rx="5" ry="9" transform="rotate(14 131 52)"
+                         fill="#fffdf9" opacity="0.75"/>
+                <path d="M89 66 C91 49, 105 41, 117 45 C129 49, 134 65, 128 84 L92 84 C88 78, 88 71, 89 66 Z"
+                      fill="#fff8ee" stroke="#5c2d0c" stroke-width="3" stroke-linejoin="round"/>
+                <polyline points="90,66 99,62 107,69 116,61 124,67 130,63"
+                          fill="none" stroke="#5c2d0c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <ellipse cx="101" cy="53" rx="4.5" ry="8" transform="rotate(-12 101 53)"
+                         fill="#ffffff" opacity="0.85"/>
+                <path d="M22 76 L42 82 L26 90 L48 92 L34 103 L58 98 L48 111 L72 101 L66 115 L88 103 L86 118 L106 104 L110 118 L124 103 L134 115 L142 100 L156 110 L158 95 L176 102 L168 88 L190 91 L174 80 L196 76 L172 72 L188 64 L164 70 L144 77 L122 81 L104 82 L84 80 L62 77 L42 73 Z"
+                      fill="#ff9f1a" stroke="#5c2d0c" stroke-width="3" stroke-linejoin="round"/>
+              </svg>
+            </div>
             <div class="metric-value" id="dayProgress">--</div>
           </div>
         </div>
       </section>
 
-      <section class="right-column layer-panel">
+      <section class="right-column">
         <div class="card">
-          <h2 class="section-heading">Pengaturan Waktu Penetasan &amp; Estimasi Menetas</h2>
+          <h2 class="section-heading centered">
+            <i data-lucide="calendar-days" style="color: #b45309;"></i>
+            Pengaturan Waktu Penetasan &amp; Estimasi Telur Menetas
+          </h2>
+
           <div class="hatch-top-row">
             <div class="field-group">
-              <label class="field-label" for="dayOneInput">Tanggal Memasukkan Telur</label>
+              <label class="field-label" for="dayOneInput">
+                <i data-lucide="calendar-plus" style="color: #0284c7;"></i>
+                Kapan Kamu Memasukkan Telur
+              </label>
               <input type="date" id="dayOneInput" onchange="previewCalendars()" />
             </div>
             <div class="field-group">
-              <label class="field-label" for="hatchDaysInput">Durasi Menetas (Hari)</label>
+              <label class="field-label" for="hatchDaysInput">
+                <i data-lucide="hourglass" style="color: #d97706;"></i>
+                Durasi Menetas (Hari)
+              </label>
               <input type="number" id="hatchDaysInput" value="21" min="1" max="120" oninput="previewCalendars()" />
             </div>
             <div class="field-group">
-              <button class="btn btn-primary" onclick="saveSettings()">Simpan</button>
+              <button class="btn btn-primary" onclick="saveSettings()">
+                <i data-lucide="save" style="color: #fde68a;"></i>
+                Simpan
+              </button>
             </div>
           </div>
 
-          <div class="calendar-pair">
+          <div class="calendar-split">
             <div class="cal-box">
               <div class="cal-header">
-                <span>Kalender Masuk Telur</span>
+                <span>
+                  <i data-lucide="egg" style="color: #fcd34d;"></i>
+                  Kapan Kamu Memasukkan Telur
+                </span>
                 <span id="inBadge">Day 1</span>
               </div>
               <div class="cal-body">
@@ -505,7 +754,10 @@
 
             <div class="cal-box">
               <div class="cal-header harvest">
-                <span>Kalender Bisa Diambil</span>
+                <span>
+                  <i data-lucide="calendar-check" style="color: #86efac;"></i>
+                  Estimasi Telur Menetas
+                </span>
                 <span id="outBadge">Est.</span>
               </div>
               <div class="cal-body">
@@ -525,8 +777,14 @@
         <div class="charts-grid">
           <div class="card chart-card">
             <div class="chart-header">
-              <h2 class="section-heading" style="margin: 0;">Grafik Suhu per Waktu</h2>
-              <button class="btn btn-excel" onclick="downloadTempExcel()">Unduh Data</button>
+              <h2 class="section-heading">
+                <i data-lucide="thermometer-sun" style="color: #ea580c;"></i>
+                Grafik Perubahan Suhu
+              </h2>
+              <button class="btn btn-excel" onclick="downloadExcel('suhu')">
+                <i data-lucide="file-spreadsheet" style="color: #fef08a;"></i>
+                Unduh Data
+              </button>
             </div>
             <div class="chart-wrap">
               <canvas id="tempChart"></canvas>
@@ -535,8 +793,14 @@
 
           <div class="card chart-card">
             <div class="chart-header">
-              <h2 class="section-heading" style="margin: 0;">Grafik Air Humidity per Waktu</h2>
-              <button class="btn btn-excel" onclick="downloadHumidityExcel()">Unduh Data</button>
+              <h2 class="section-heading">
+                <i data-lucide="droplets" style="color: #0284c7;"></i>
+                Grafik Kelembaban Udara
+              </h2>
+              <button class="btn btn-excel" onclick="downloadExcel('kelembaban')">
+                <i data-lucide="file-spreadsheet" style="color: #fef08a;"></i>
+                Unduh Data
+              </button>
             </div>
             <div class="chart-wrap">
               <canvas id="humidityChart"></canvas>
@@ -550,6 +814,7 @@
   <script>
     const SUPABASE_URL = "https://zwwcgjkvmyorplesjseu.supabase.co";
     const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const MAX_SETPOINT_GAUGE = 37.5;
     let latestRows = [];
     let tempChart;
     let humidityChart;
@@ -559,6 +824,85 @@
       "Authorization": "Bearer " + SUPABASE_KEY,
       "Content-Type": "application/json"
     };
+
+    function drawSetpointGauge(currentTemp, targetSetpoint = MAX_SETPOINT_GAUGE) {
+      const canvas = document.getElementById("setpointGauge");
+      const readoutEl = document.getElementById("setpointVal");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+
+      const maxScale = MAX_SETPOINT_GAUGE;
+      document.getElementById("gaugeMaxLabel").textContent = `${maxScale.toFixed(1)}°`;
+
+      const cx = canvas.width / 2;
+      const cy = canvas.height - 10;
+      const radius = 76;
+      const lineWidth = 14;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, Math.PI, 0, false);
+      ctx.lineWidth = lineWidth;
+      ctx.strokeStyle = "rgba(140, 88, 40, 0.18)";
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      if (currentTemp === null || currentTemp === undefined || Number.isNaN(Number(currentTemp))) {
+        readoutEl.style.color = "#4d7c0f";
+        document.getElementById("gaugeStatus").textContent = "Menunggu Suhu...";
+        return;
+      }
+
+      const tempNum = Number(currentTemp);
+      const spNum = Number.isNaN(Number(targetSetpoint)) ? MAX_SETPOINT_GAUGE : Number(targetSetpoint);
+      const ratio = Math.min(Math.max(tempNum / maxScale, 0), 1);
+      const endAngle = Math.PI + ratio * Math.PI;
+      const diff = spNum - tempNum;
+
+      let arcColor = "#0284c7";
+      let badgeColor = "#4d7c0f";
+      if (tempNum >= spNum - 0.05) {
+        arcColor = "#4d7c0f";
+        badgeColor = "#4d7c0f";
+      } else if (diff <= 1.5) {
+        arcColor = "#d97706";
+        badgeColor = "#d97706";
+      }
+
+      readoutEl.style.color = badgeColor;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, Math.PI, endAngle, false);
+      ctx.lineWidth = lineWidth;
+      ctx.strokeStyle = arcColor;
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      const needleLen = radius - 13;
+      const nx = cx + needleLen * Math.cos(endAngle);
+      const ny = cy + needleLen * Math.sin(endAngle);
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(nx, ny);
+      ctx.lineWidth = 2.6;
+      ctx.strokeStyle = "#be123c";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#4a2c11";
+      ctx.fill();
+
+      if (Math.abs(diff) < 0.05) {
+        document.getElementById("gaugeStatus").textContent = "Pas Di Suhu Acuan";
+      } else if (diff > 0) {
+        document.getElementById("gaugeStatus").textContent = `Kurang ${diff.toFixed(2)} °C Lagi`;
+      } else {
+        document.getElementById("gaugeStatus").textContent = `Lebih ${Math.abs(diff).toFixed(2)} °C`;
+      }
+    }
 
     function initCharts() {
       const commonScales = {
@@ -581,15 +925,15 @@
             {
               label: "Suhu Aktual (°C)",
               data: [],
-              borderColor: "#b45309",
-              backgroundColor: "rgba(217, 119, 6, 0.16)",
+              borderColor: "#ea580c",
+              backgroundColor: "rgba(234, 88, 12, 0.16)",
               fill: true,
               borderWidth: 2.2,
               pointRadius: 2,
               tension: 0.3
             },
             {
-              label: "Set Point Suhu (°C)",
+              label: "Suhu Acuan (°C)",
               data: [],
               borderColor: "#4d7c0f",
               borderDash: [6, 5],
@@ -616,10 +960,10 @@
           labels: [],
           datasets: [
             {
-              label: "Air Humidity (%)",
+              label: "Kelembaban Udara (%)",
               data: [],
-              borderColor: "#8c5828",
-              backgroundColor: "rgba(140, 88, 40, 0.18)",
+              borderColor: "#0284c7",
+              backgroundColor: "rgba(2, 132, 199, 0.16)",
               fill: true,
               borderWidth: 2.2,
               pointRadius: 2,
@@ -709,7 +1053,7 @@
         const newest = rows[0];
 
         const hasTemp = newest.ds_temp !== null && newest.ds_temp !== undefined;
-        const sp = newest.setpoint !== null && newest.setpoint !== undefined ? Number(newest.setpoint) : 37.5;
+        const sp = newest.setpoint !== null && newest.setpoint !== undefined ? Number(newest.setpoint) : MAX_SETPOINT_GAUGE;
 
         document.getElementById("dsTemp").innerText =
           hasTemp ? `${Number(newest.ds_temp).toFixed(2)} °C` : "-- °C";
@@ -720,8 +1064,10 @@
           const errVal = sp - tempNum;
           const sign = errVal > 0 ? "+" : "";
           document.getElementById("errorVal").innerText = `${sign}${errVal.toFixed(2)} °C`;
+          drawSetpointGauge(tempNum, sp);
         } else {
           document.getElementById("errorVal").innerText = "-- °C";
+          drawSetpointGauge(null, sp);
         }
 
         document.getElementById("pwmVal").innerText =
@@ -739,7 +1085,7 @@
 
         tempChart.data.labels = labels;
         tempChart.data.datasets[0].data = ascRows.map(r => r.ds_temp);
-        tempChart.data.datasets[1].data = ascRows.map(r => r.setpoint ?? 37.5);
+        tempChart.data.datasets[1].data = ascRows.map(r => r.setpoint ?? MAX_SETPOINT_GAUGE);
         tempChart.update();
 
         humidityChart.data.labels = labels;
@@ -750,39 +1096,44 @@
       }
     }
 
-    function exportSheet(rowsData, sheetName, fileName) {
-      const ws = XLSX.utils.json_to_sheet(rowsData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, sheetName);
-      XLSX.writeFile(wb, fileName);
-    }
-
-    function downloadTempExcel() {
+    function downloadExcel(mode = "all") {
       if (!latestRows.length) return;
       const formatted = [...latestRows].reverse().map(r => {
         const tempNum = r.ds_temp !== null && r.ds_temp !== undefined ? Number(r.ds_temp) : null;
-        const spNum = r.setpoint !== null && r.setpoint !== undefined ? Number(r.setpoint) : 37.5;
+        const spNum = r.setpoint !== null && r.setpoint !== undefined ? Number(r.setpoint) : MAX_SETPOINT_GAUGE;
+        if (mode === "suhu") {
+          return {
+            Waktu: new Date(r.created_at).toLocaleString("id-ID"),
+            Suhu_Aktual_C: tempNum,
+            Suhu_Acuan_C: spNum,
+            Error_Suhu_C: tempNum !== null ? Number((spNum - tempNum).toFixed(2)) : ""
+          };
+        }
+        if (mode === "kelembaban") {
+          return {
+            Waktu: new Date(r.created_at).toLocaleString("id-ID"),
+            Kelembaban_Udara_Persen: r.humidity ?? ""
+          };
+        }
         return {
           Waktu: new Date(r.created_at).toLocaleString("id-ID"),
           Suhu_Aktual_C: tempNum,
-          Set_Point_Suhu_C: spNum,
+          Suhu_Acuan_C: spNum,
           Error_Suhu_C: tempNum !== null ? Number((spNum - tempNum).toFixed(2)) : "",
-          Duty_Cycle_PWM_0_255: r.pwm_output ?? 0
+          Duty_Cycle_PWM_0_255: r.pwm_output ?? 0,
+          Kelembaban_Udara_Persen: r.humidity ?? ""
         };
       });
-      exportSheet(formatted, "Suhu", "data_suhu_smart_brooder.xlsx");
+      const ws = XLSX.utils.json_to_sheet(formatted);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Data");
+      const suffix = mode === "suhu" ? "_suhu" : mode === "kelembaban" ? "_kelembaban" : "";
+      XLSX.writeFile(wb, `data_smart_brooder${suffix}.xlsx`);
     }
 
-    function downloadHumidityExcel() {
-      if (!latestRows.length) return;
-      const formatted = [...latestRows].reverse().map(r => ({
-        Waktu: new Date(r.created_at).toLocaleString("id-ID"),
-        Air_Humidity_Persen: r.humidity ?? ""
-      }));
-      exportSheet(formatted, "Humidity", "data_humidity_smart_brooder.xlsx");
-    }
-
+    lucide.createIcons();
     initCharts();
+    drawSetpointGauge(null, MAX_SETPOINT_GAUGE);
     loadSettings();
     loadSensorData();
     setInterval(loadSensorData, 20000);
